@@ -3,7 +3,7 @@ import { setAuthFail, setAuthSuccess, setAuthDefult } from '../../reducers/AuthR
 import { useReducer,useEffect} from 'react'
 import { AuthContext } from './AuthContext';
 import axios from 'axios'
-import { LOCAL_STORAGE_TOKEN_NAME } from '../constant'
+import { LOCAL_STORAGE_TOKEN_NAME, apiUrl } from '../constant'
 import setAuthToken from '../../utils/setAuthToken'
 
 
@@ -23,7 +23,7 @@ const AuthContextProvider = ({children}) => {
         try{
             let response
             if(check){
-                response = await axios.get(`http://localhost:5000/auth`)
+                response = await axios.get(`${apiUrl}/auth`)
             }
             console.log(response.data.success)
             if(response.data.success){
@@ -42,7 +42,7 @@ const AuthContextProvider = ({children}) => {
 
     const loginUser = async userForm => {
         try{
-            const response =await axios.post('http://localhost:5000/auth/login',userForm);
+            const response =await axios.post(`${apiUrl}/auth/login`,userForm);
             if(response.data.success)
             localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken)
             dispatch(setAuthSuccess(response.data.user))
@@ -56,7 +56,7 @@ const AuthContextProvider = ({children}) => {
 
     const registerUser = async userForm => {
         try{
-            const response =await axios.post('http://localhost:5000/auth/register',userForm);
+            const response =await axios.post(`${apiUrl}/auth/register`,userForm);
             if(response.data.success)
             localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken)
             dispatch(setAuthSuccess(response.data.newUser))

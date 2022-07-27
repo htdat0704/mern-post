@@ -40,7 +40,7 @@ app.use(
 app.use(express.json());
 app.use(cors())
 
-const PORT = 5000;
+const PORT = 4000;
 
 route(app);
 app.listen(PORT, () => console.log(`SERVER start on PORT ${PORT}`));
