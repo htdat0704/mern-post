@@ -12,6 +12,7 @@ router.put('/update/:id',verifyToken,PostController.updatePost)
 router.put('/updateComment/:id',verifyToken,PostController.updateComment)
 router.get('/user',verifyToken,PostController.seeUserPost)
 router.get('/get/:slug',PostController.getOnePost)
+router.get('/getPostUser/:username',PostController.getPostByUser)
 router.get('/',PostController.seePost)
 
 module.exports = router
