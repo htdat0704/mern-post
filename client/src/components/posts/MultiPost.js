@@ -42,13 +42,8 @@ const MultiPost = ({
                             </Badge>
                             <Card.Text>Description: {description}</Card.Text>
                             <Card.Text>
-                                <Button
-                                    to={`/postUser/${
-                                        username || user.username
-                                    }`}
-                                    as={Link}
-                                >
-                                    Author: {username || user.username}
+                                <Button to={`/postUser/${username}`} as={Link}>
+                                    Author: {username}
                                 </Button>
                             </Card.Text>
                         </Col>
@@ -56,7 +51,7 @@ const MultiPost = ({
                             <ActionButton
                                 url={url}
                                 _id={_id}
-                                username={username || user.username}
+                                username={username}
                                 slug={slug}
                             />
                             <br></br>
