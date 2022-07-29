@@ -109,10 +109,14 @@ class PostController {
                     message: 'Post not found or user not authorised',
                 })
 
+            const postFind = await Post.findOne({_id: req.params.id}).populate('user', [
+                    'username'
+            ])
+            
             res.json({
                 success: true,
                 message: 'Excellent progress!',
-                post: updatedPost
+                post: postFind
             })
         } catch (error) {
             console.log(error)

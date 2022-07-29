@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import setAuthToken from '../../utils/setAuthToken'
 import { LOCAL_STORAGE_TOKEN_NAME } from '../../context/constant'
 import Spinner from 'react-bootstrap/Spinner'
+import LoadingModal from '../layout/LoadingModel'
 
 const UpdateForm = ({post}) => {
 
@@ -19,6 +20,26 @@ const UpdateForm = ({post}) => {
         }))
     }
 
+    const [isShowLoading, setShowLoading] = useState({
+        type: '',
+        show: false,
+    });
+
+    const loadingShow = (type) => {
+        setShowLoading(prev => ({
+            ...prev,
+            type: type,
+            show: true,
+        }))
+        setTimeout(() => {
+            setShowLoading(prev => ({
+                ...prev,
+                show: false,
+            }))
+        },1500)
+    }   
+
+
 
     const handleSubmit = async event =>{
         event.preventDefault()
@@ -26,7 +47,7 @@ const UpdateForm = ({post}) => {
         try{
             await setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
             await updateOnePost(updatedPost)
-
+            await loadingShow('UPDATE')
             navigate(`/post/${updatedPost.slug}`)
             
         }catch(e){
@@ -88,7 +109,10 @@ const UpdateForm = ({post}) => {
         )
     }
 
-    return body;
+    return <>
+        {body}
+        <LoadingModal show={isShowLoading.show} type={isShowLoading.type}></LoadingModal>
+    </>;
 }
 
 export default UpdateForm
