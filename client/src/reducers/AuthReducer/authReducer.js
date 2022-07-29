@@ -1,19 +1,19 @@
-import { SET_AUTH, SET_DEFAULT } from "./authActions";
+import { SET_AUTH, SET_DEFAULT, UPDATE_USER } from './authActions'
 export const authLoading = {
     authLoading: true,
     isAuthenticated: false,
-    user: null
+    user: null,
 }
 
-export const authReducer = (state,action) => {
-    const{type,  payload} = action;
-    const{isAuthenticated, user} = payload ?? '';
-    switch(type){
+export const authReducer = (state, action) => {
+    const { type, payload } = action
+    const { isAuthenticated, user } = payload ?? ''
+    switch (type) {
         case SET_DEFAULT:
             return {
                 authLoading: true,
                 isAuthenticated: false,
-                user: null
+                user: null,
             }
         case SET_AUTH:
             return {
@@ -21,8 +21,13 @@ export const authReducer = (state,action) => {
                 isAuthenticated,
                 user,
                 authLoading: false,
-            };
+            }
+        case UPDATE_USER:
+            return {
+                ...state,
+                user: payload,
+            }
         default:
-            return payload;
+            return payload
     }
 }

@@ -1,18 +1,17 @@
-import { Navigate } from "react-router-dom";
-import NavbarMenu from "../layout/NavBar"
+import { Navigate } from 'react-router-dom'
+import NavbarMenu from '../layout/NavBar'
 
 const Protected = ({ user, children }) => {
-
     if (!user) {
-        return <Navigate to="/dashboard" replace />;
+        return <Navigate to="/dashboard" replace />
     }
-    
+
     return (
         <>
             <NavbarMenu></NavbarMenu>
-             {children}
+            {children}
         </>
     )
-};  
+}
 
-export default Protected;
+export default Protected

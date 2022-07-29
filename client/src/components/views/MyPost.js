@@ -1,89 +1,91 @@
-import { PostContext } from "../../context/Post/PostContext";
-import { useContext, useEffect, useState } from "react";
-import Spinner from 'react-bootstrap/Spinner';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import MultiPost from "../posts/MultiPost";
-import AddPostModal from "../posts/AddPostModel";
-import addIcon from "../../assets/addicon.svg"
-import { AuthContext } from "../../context/Auth/AuthContext";
-import Footer from "../layout/Footer";
+import { PostContext } from '../../context/Post/PostContext'
+import { useContext, useEffect, useState } from 'react'
+import Spinner from 'react-bootstrap/Spinner'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
+import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
+import MultiPost from '../posts/MultiPost'
+import AddPostModal from '../posts/AddPostModel'
+import addIcon from '../../assets/addicon.svg'
+import { AuthContext } from '../../context/Auth/AuthContext'
+import Footer from '../layout/Footer'
 
-const MyPost = () =>{
+const MyPost = () => {
+    const {
+        getPostOneUsers,
+        setShowAddPost,
+        postState: { posts },
+    } = useContext(PostContext)
+    const {
+        state: { user },
+    } = useContext(AuthContext)
+    const [isLoading, setLoading] = useState(true)
 
-    const { getPostOneUsers, setShowAddPost, postState: {posts}} = useContext(PostContext);
-    const { state:{ user} } = useContext(AuthContext);
-    const [isLoading,setLoading] = useState(true)
-    
-    console.log(posts)
-
-    useEffect(() =>  {
+    useEffect(() => {
         const timer = setTimeout(async () => {
             await getPostOneUsers()
             await setLoading(false)
-          }, 1000);
-        return () => clearTimeout(timer);
-        
+        }, 1000)
+        return () => clearTimeout(timer)
     }, [])
 
+    let body
 
-    let body;
-
-    if(isLoading ) {
-
+    if (isLoading) {
         body = (
-            <div className='d-flex justify-content-center mt-2'>
-                <Spinner animation='border' variant='info' />
+            <div className="d-flex justify-content-center mt-2">
+                <Spinner animation="border" variant="info" />
             </div>
         )
-        
-    }else if( posts.length !== 0){
-        
+    } else if (posts.length !== 0) {
         body = (
             <>
-                <Row className='row-cols-1 row-cols-md-3 g-4 mx-auto mt-3'>
-                    {posts.map(post => (
-                        <Col key = {post._id} className='my-2'>
-                            <MultiPost post={post} ></MultiPost>
+                <Row className="row-cols-1 row-cols-md-3 g-4 mx-auto mt-3">
+                    {posts.map((post) => (
+                        <Col key={post._id} className="my-2">
+                            <MultiPost post={post}></MultiPost>
                         </Col>
                     ))}
                 </Row>
-                
-                <Button className='btn-floating' onClick={setShowAddPost.bind(this, true)}>
-                        <img src={addIcon} alt='add Post' width='60' height='60' />
+
+                <Button
+                    className="btn-floating"
+                    onClick={setShowAddPost.bind(this, true)}
+                >
+                    <img src={addIcon} alt="add Post" width="60" height="60" />
                 </Button>
             </>
-        ) 
-    }else{
+        )
+    } else {
         body = (
-			<>
-				<Card className='text-center mx-5 my-5'>
-					<Card.Header as='h1'>Hi {user.username}</Card.Header>
-					<Card.Body>
-						<Card.Title>Welcome to Post everyday</Card.Title>
-						<Card.Text>
-							Click the button below to track your experience
-						</Card.Text>
-						<Button
-							variant='primary'
-							onClick={setShowAddPost.bind(this, true)}
-						>
-							Submit new Post
-						</Button>
-					</Card.Body>
-				</Card>
-			</>
-		)
+            <>
+                <Card className="text-center mx-5 my-5">
+                    <Card.Header as="h1">Hi {user.username}</Card.Header>
+                    <Card.Body>
+                        <Card.Title>Welcome to Post everyday</Card.Title>
+                        <Card.Text>
+                            Click the button below to track your experience
+                        </Card.Text>
+                        <Button
+                            variant="primary"
+                            onClick={setShowAddPost.bind(this, true)}
+                        >
+                            Submit new Post
+                        </Button>
+                    </Card.Body>
+                </Card>
+            </>
+        )
     }
-    
 
-    return <>
-        {body}
-        <Footer></Footer>
-        <AddPostModal/>
-    </>
+    return (
+        <>
+            {body}
+            <Footer></Footer>
+            <AddPostModal />
+        </>
+    )
 }
 
 export default MyPost

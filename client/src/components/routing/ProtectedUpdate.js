@@ -1,17 +1,11 @@
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom'
 
-const ProtectedUpdate = ({ post,user, children }) => {
-
-    if(post !== user ){
-        return <Navigate to="/dashboard" replace />;
+const ProtectedUpdate = ({ post, user, children }) => {
+    if (post !== user) {
+        return <Navigate to="/dashboard" replace />
     }
 
-    
-    return (
-        <>
-             {children}
-        </>
-    )
-};  
+    return <>{children}</>
+}
 
-export default ProtectedUpdate;
+export default ProtectedUpdate

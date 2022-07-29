@@ -1,28 +1,27 @@
-import {Navigate} from 'react-router-dom'
+import { Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import ReactLoading from 'react-loading'
 import Spinner from 'react-bootstrap/Spinner'
 
-const Landing = () =>{
-
-    const [isLoading,setLoading] = useState(true)
+const Landing = () => {
+    const [isLoading, setLoading] = useState(true)
 
     useEffect(() => {
         if (isLoading) {
-          setTimeout(() => {
-          setLoading(false);
-        }, 2000);
+            setTimeout(() => {
+                setLoading(false)
+            }, 2000)
         }
-      }, [isLoading]);
+    }, [isLoading])
 
     return (
         <>
-            {isLoading && 
+            {isLoading && (
                 <div className="spinner-container">
                     <ReactLoading type={'balls'} color={'green'} />
                 </div>
-            }
-            {!isLoading && <Navigate to='/login' />}
+            )}
+            {!isLoading && <Navigate to="/login" />}
         </>
     )
 }

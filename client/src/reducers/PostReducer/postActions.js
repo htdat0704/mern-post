@@ -11,35 +11,35 @@ export const ADD_COMMENT = 'add_comment'
 export const DELETE_COMMENT = 'delete_comment'
 export const UPDATE_COMMENT = 'update_comment'
 
-export const updateComment = payload => {
-    return{
+export const updateComment = (payload) => {
+    return {
         type: UPDATE_COMMENT,
-        payload
+        payload,
     }
 }
-export const deleteComment = commentID => {
-    return{
+export const deleteComment = (commentID) => {
+    return {
         type: DELETE_COMMENT,
-        payload: commentID
+        payload: commentID,
     }
 }
 
-export const addCommentSuccess = payload => {
-    return{
+export const addCommentSuccess = (payload) => {
+    return {
         type: ADD_COMMENT,
-        payload
+        payload,
     }
 }
-export const getComment = payload => {
-    return{
+export const getComment = (payload) => {
+    return {
         type: GET_COMMENT,
-        payload
+        payload,
     }
 }
 
 export const setDefault = () => {
     return {
-        type: SET_DEFAULT
+        type: SET_DEFAULT,
     }
 }
 
@@ -57,37 +57,37 @@ export const setPostFail = () => {
     }
 }
 
-export const setAddPost = payload => {
-    return{
+export const setAddPost = (payload) => {
+    return {
         type: ADD_POST,
-        payload: payload
+        payload: payload,
     }
 }
 
 export const logoutUserPost = () => {
-    return{
+    return {
         type: LOGOUT_USER_POST,
         payload: [],
     }
 }
 
-export const deletePost = postId => {
-    return{
+export const deletePost = (postId) => {
+    return {
         type: DELETE_POST,
-        payload: postId
+        payload: postId,
     }
 }
 
-export const updatePost = payload => {
-    return{
+export const updatePost = (payload) => {
+    return {
         type: UPDATE_POST,
-        payload: payload
+        payload: payload,
     }
 }
 
-export const getPost = payload => {
-    return{
+export const getPost = (payload) => {
+    return {
         type: GET_POST,
-        payload: payload
+        payload: payload,
     }
 }
