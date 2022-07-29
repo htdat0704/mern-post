@@ -1,10 +1,10 @@
 import {PostContext} from './PostContext';
 import { postReducer,postLoading } from '../../reducers/PostReducer/postReducer';
 import axios from 'axios';
-import {setPostSuccess, setPostFail,setAddPost, deletePost, updatePost, getPost, setDefault} from '../../reducers/PostReducer/postActions'
+import {setPostSuccess, setPostFail,setAddPost, deletePost, updatePost, getPost, setDefault, getComment, addCommentSuccess, deleteComment} from '../../reducers/PostReducer/postActions'
 import {useReducer, useState} from 'react'
 import setAuthToken from '../../utils/setAuthToken';
-import { LOCAL_STORAGE_TOKEN_NAME, apiUrl } from '../constant';
+import { LOCAL_STORAGE_TOKEN_NAME, apiUrl, apiUrlHeroku } from '../constant';
 
 
 function PostProvider({children}) {
@@ -19,7 +19,7 @@ function PostProvider({children}) {
 
     const getPosts = async() => {
         try{
-            const response = await axios.get(`${apiUrl}/post`)
+            const response = await axios.get(`${apiUrlHeroku}/post`)
             if(response.data.success){
                 dispatch(setPostSuccess(response.data.postHaveUser))
                 // setPostFull(prev => ({
@@ -37,7 +37,7 @@ function PostProvider({children}) {
     const getPostOneUsers = async() => {
         try{
             setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
-            const response = await axios.get(`${apiUrl}/post/user`)
+            const response = await axios.get(`${apiUrlHeroku}/post/user`)
             if(response.data.success){
                 dispatch(setPostSuccess(response.data.posts))
 
@@ -49,7 +49,7 @@ function PostProvider({children}) {
 
     const addPost = async newPost =>{
         try{
-            const response = await axios.post(`${apiUrl}/post/create`, newPost)
+            const response = await axios.post(`${apiUrlHeroku}/post/create`, newPost)
             if(response.data.success){
                 await dispatch(setAddPost(response.data.postOut))
                 return response.data
@@ -63,7 +63,7 @@ function PostProvider({children}) {
     const deletePostt = async postId => {
         try{
             await setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
-            const response  = await axios.delete(`${apiUrl}/post/delete/${postId}`)
+            const response  = await axios.delete(`${apiUrlHeroku}/post/delete/${postId}`)
             if(response.data.success){
                 dispatch(deletePost(postId))
             }
@@ -74,7 +74,7 @@ function PostProvider({children}) {
 
     const updateOnePost = async updatePostForm => {
         try{
-            const response = await axios.put(`${apiUrl}/post/update/${updatePostForm._id}`,updatePostForm)
+            const response = await axios.put(`${apiUrlHeroku}/post/update/${updatePostForm._id}`,updatePostForm)
             if(response.data.success){
                 dispatch(updatePost(response.data.post))
             }
@@ -87,12 +87,42 @@ function PostProvider({children}) {
 
     const getOnePost = async slug => {
         try{
-            const response = await axios.get(`${apiUrl}/post/get/${slug}`)
+            const response = await axios.get(`${apiUrlHeroku}/post/get/${slug}`)
             if(response.data.success){
                 await dispatch(getPost(response.data.postFind))
+                await dispatch(getComment(response.data.commentFind))
             }
+            console.log(response.data.commentFind)
             return response;
         }catch(e){
+            console.log(e)
+        }
+    }
+
+    const addComment = async (body,parentId = null) => {
+        try{
+            const formComment = {
+                body,
+                parentId,
+                postId : postState.post._id
+            }
+            const response = await axios.post(`${apiUrlHeroku}/post/createComment`, formComment)
+            if(response.data.success){
+                await dispatch(getComment(response.data.commentFind))
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+
+    const deleteCommentId = async commentId => {
+        try{
+            await setAuthToken(localStorage[LOCAL_STORAGE_TOKEN_NAME])
+            const response  = await axios.delete(`${apiUrlHeroku}/post/deleteComment/${commentId}`)
+            if(response.data.success){
+                dispatch(deleteComment(commentId))
+            }
+        }catch (e){
             console.log(e)
         }
     }
@@ -102,7 +132,7 @@ function PostProvider({children}) {
     }
 
 
-    const postContext = {postState, getPosts, getPostOneUsers,showAddPost,setShowAddPost, addPost, deletePostt, getOnePost, updateOnePost, setStateDefault}
+    const postContext = {postState, getPosts, getPostOneUsers,showAddPost,setShowAddPost, addPost, deletePostt, getOnePost, updateOnePost, setStateDefault,addComment, deleteCommentId }
 
     return (
         <PostContext.Provider value={postContext} >

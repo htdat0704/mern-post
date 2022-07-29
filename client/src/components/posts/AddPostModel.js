@@ -7,9 +7,8 @@ import { PostContext } from '../../context/Post/PostContext'
 
 const AddPostModal = () => {
 
-    const {showAddPost, setShowAddPost, addPost} = useContext(PostContext)
+    const {showAddPost, setShowAddPost, addPost, postState: {posts}} = useContext(PostContext)
     const [disable, setDisable] = useState(false);
-    console.log(disable)
 
     const [newPost,setNewPost] = useState({
         title: '',
@@ -30,8 +29,8 @@ const AddPostModal = () => {
     }
 
     const onSubmit = async e =>{
-        setDisable(true)
         e.preventDefault()
+        setDisable(true)
         await addPost(newPost)
         setNewPost({
             title: '',

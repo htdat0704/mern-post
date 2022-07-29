@@ -1,14 +1,30 @@
-import { SET_POST_SUCCESS, SET_POST_FAIL,ADD_POST, DELETE_POST,UPDATE_POST,GET_POST , SET_DEFAULT } from "./postActions";
+import { SET_POST_SUCCESS, SET_POST_FAIL,ADD_POST, DELETE_POST,UPDATE_POST,GET_POST , SET_DEFAULT, GET_COMMENT, ADD_COMMENT, DELETE_COMMENT } from "./postActions";
 
 export const postLoading = {
     post:null,
     postLoading: true,
-    posts: []
+    posts: [],
+    comments: []
 }
 
 export const postReducer = (state,action) => {
     const{type,  payload} = action;
     switch(type){
+        case DELETE_COMMENT:
+            return{
+                ...state,
+                comments: state.comments.filter(comment => comment._id !== payload )
+            }
+        case ADD_COMMENT:
+            return{
+                ...state,
+                comments: [...state.comments, payload]
+            }
+        case GET_COMMENT:
+            return{
+                ...state,
+                comments: payload
+            }
         case SET_DEFAULT:
             return{
                 post:null,
@@ -36,7 +52,7 @@ export const postReducer = (state,action) => {
         case ADD_POST :
             return{
                 ...state,
-                posts: [...state.posts, payload]
+                posts: [...state.posts, payload],
             }
         case DELETE_POST:
             return{

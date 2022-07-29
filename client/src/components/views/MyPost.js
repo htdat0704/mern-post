@@ -1,5 +1,5 @@
 import { PostContext } from "../../context/Post/PostContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Spinner from 'react-bootstrap/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,20 +9,29 @@ import MultiPost from "../posts/MultiPost";
 import AddPostModal from "../posts/AddPostModel";
 import addIcon from "../../assets/addicon.svg"
 import { AuthContext } from "../../context/Auth/AuthContext";
+import Footer from "../layout/Footer";
 
 const MyPost = () =>{
 
-    const { getPostOneUsers, setShowAddPost, postState: {posts, postLoading}} = useContext(PostContext);
+    const { getPostOneUsers, setShowAddPost, postState: {posts}} = useContext(PostContext);
     const { state:{ user} } = useContext(AuthContext);
+    const [isLoading,setLoading] = useState(true)
+    
     console.log(posts)
+
     useEffect(() =>  {
-        getPostOneUsers()
+        const timer = setTimeout(async () => {
+            await getPostOneUsers()
+            await setLoading(false)
+          }, 1000);
+        return () => clearTimeout(timer);
+        
     }, [])
 
 
     let body;
 
-    if(postLoading ) {
+    if(isLoading ) {
 
         body = (
             <div className='d-flex justify-content-center mt-2'>
@@ -72,6 +81,7 @@ const MyPost = () =>{
 
     return <>
         {body}
+        <Footer></Footer>
         <AddPostModal/>
     </>
 }

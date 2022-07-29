@@ -2,10 +2,13 @@ const Post = require('../models/Post')
 const User = require('../models/User')
 const argon2 = require('argon2')
 const jwt = require('jsonwebtoken')
+const Comment = require('../models/Comment')
 
 class PostController {
     async createPost(req,res,next){
         const {title, description,url, status} = req.body;
+        console.log(req.body);
+        console.log(req.userId);
 
         if(!title){
             return res.status(400).json({success: false, message: 'Missing Tittle'})
@@ -32,7 +35,7 @@ class PostController {
 
             console.log(postOut)
             
-            res.json({success: true, message: "Welcome to LEARN HEAR", postOut})
+            res.json({success: true, message: "Welcome to Post HEAR", postOut})
         }catch(e){
             console.log(e)
             return res.status(400).json({success: false, message: "ERROR"})
@@ -138,8 +141,51 @@ class PostController {
             const postFind = await Post.findOne({slug: req.params.slug}).populate('user', [
                 'username'
             ])
-            res.json({success: true, postFind})
+            const commentFind = await Comment.find({post: postFind._id}).populate('user',[
+                'username'
+            ])
+            res.json({success: true, postFind, commentFind})
         }catch(e){
+            console.log(err)
+            res.status(500).json({success: false, message:'Interal server error'})
+        }
+    }
+
+    addComment = async (req,res) => {
+        const {body, parentId, postId} = req.body;
+        try{
+            const newComment = new Comment({
+                body,
+                parentId: parentId || null,
+                user: req.userId,
+                post: postId
+            })
+            newComment.save()
+            const postFind = await Post.findOne({_id: postId})
+            const commentFind = await Comment.find({post: postFind._id}).populate('user',[
+                'username'
+            ])
+            
+            res.json({success: true, commentFind})
+        }catch(e){
+            console.log(e)
+            res.status(500).json({success: false, message:'ERROR'})
+        }
+    }
+
+    deleteComment = async (req,res) => {
+        try{
+            const commentDeleteCondition = { _id: req.params.id, user: req.userId }
+            const findCommentDelete = await Comment.findOne({_id: req.params.id}).lean()
+            const deleteChildComment = await Comment.deleteMany({parentId : findCommentDelete._id })
+            const deleteComment = await Comment.findOneAndDelete(commentDeleteCondition)
+            if (!deleteComment || !deleteChildComment)
+                return res.status(401).json({
+                    success: false,
+                    message: 'Comment not found or user not authorised'
+                })
+            res.json({ success: true }) 
+        }catch(err){
             console.log(err)
             res.status(500).json({success: false, message:'Interal server error'})
         }

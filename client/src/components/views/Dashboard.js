@@ -1,6 +1,6 @@
 import { PostContext } from "../../context/Post/PostContext";
 import { AuthContext } from "../../context/Auth/AuthContext";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Spinner from 'react-bootstrap/Spinner';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -10,18 +10,26 @@ import NavbarMenu from "../layout/NavBar"
 import AddPostModal from "../posts/AddPostModel";
 import addIcon from "../../assets/addicon.svg"
 import Button from 'react-bootstrap/Button';
+import Footer from "../layout/Footer";
 
 const Dashboard = () =>{
 
     const { postState: {posts, postLoading}, getPosts, setShowAddPost} = useContext(PostContext);
-    const { state:{ isAuthenticated, authLoading} } = useContext(AuthContext);
+    const { state:{ isAuthenticated, authLoading},loadUser } = useContext(AuthContext);
+    const [isLoading,setLoading] = useState(true)
+
     useEffect(() => { 
-        getPosts();
+        const timer = setTimeout(async () => {
+            await getPosts();
+            await loadUser();
+            await setLoading(false)
+          }, 1000);
+        return () => clearTimeout(timer);
     }, [])
 
     let body;
 
-    if(postLoading || authLoading) {
+    if(postLoading || authLoading || isLoading) {
         body = (
             <div className="spinner-container">
                 <Spinner animation='border' variant='info'/>
@@ -64,6 +72,7 @@ const Dashboard = () =>{
 
     return <>
         {body}
+        <Footer></Footer>
         <AddPostModal/>
     </>
 }

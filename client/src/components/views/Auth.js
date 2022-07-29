@@ -5,10 +5,11 @@ import { useContext, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner'
 import NavbarNoLogin from '../layout/NavBarNoLogin';
+import Footer from '../layout/Footer';
 
 const Auth = ({ authRoute }) => {
 
-    const {state: {authLoading, isAuthenticated}, loadUser} = useContext(AuthContext);
+    const {state: { isAuthenticated}, loadUser} = useContext(AuthContext);
     const {isLoading, setLoading} = useState(true)
     
     const load = async () => {
@@ -63,8 +64,10 @@ const Auth = ({ authRoute }) => {
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
+            <Footer></Footer>
         </>
+        
     )
 }
 

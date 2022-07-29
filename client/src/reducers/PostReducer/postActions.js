@@ -6,6 +6,29 @@ export const DELETE_POST = 'delete_post'
 export const UPDATE_POST = 'update_post'
 export const GET_POST = 'get_post'
 export const SET_DEFAULT = 'set_default'
+export const GET_COMMENT = 'get_comment'
+export const ADD_COMMENT = 'add_comment'
+export const DELETE_COMMENT = 'delete_comment'
+
+export const deleteComment = commentID => {
+    return{
+        type: DELETE_COMMENT,
+        payload: commentID
+    }
+}
+
+export const addCommentSuccess = payload => {
+    return{
+        type: ADD_COMMENT,
+        payload
+    }
+}
+export const getComment = payload => {
+    return{
+        type: GET_COMMENT,
+        payload
+    }
+}
 
 export const setDefault = () => {
     return {

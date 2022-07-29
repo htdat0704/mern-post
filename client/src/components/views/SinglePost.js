@@ -14,7 +14,7 @@ import { useParams } from 'react-router-dom';
 import UpdateForm from '../singlePost/UpdateForm';
 import ProtectedUpdate from '../routing/ProtectedUpdate';
 import Protected from '../routing/ProtectedRout';
-
+import Footer from "../layout/Footer";
 const SinglePost = ({route}) => {
 
     const {state:{ user, isAuthenticated}, loadUser} = useContext(AuthContext)
@@ -25,12 +25,12 @@ const SinglePost = ({route}) => {
     let {slug}  = useParams();
 
     useEffect(() =>{
-        const response = async () => {
+        const timer = setTimeout(async () => {
             await getOnePost(slug);
             await loadUser();
             await setLoading(false)
-        }
-        response()
+          }, 1000);
+        return () => clearTimeout(timer);
     },[slug])
     
     if(isLoading ){
@@ -41,7 +41,7 @@ const SinglePost = ({route}) => {
         )
 
     }else if(isAuthenticated){
-        console.log(user.username)
+        
         // body = (
         //     <>
         //         <NavbarMenu></NavbarMenu>
@@ -86,7 +86,12 @@ const SinglePost = ({route}) => {
     } 
 
 
-    return body;
+    return (
+        <>
+            {body}
+            <Footer></Footer>
+        </>
+    )
 }
 
 export default SinglePost

@@ -7,7 +7,7 @@ import { useContext } from 'react'
 import { PostContext } from '../../context/Post/PostContext'
 import { Link } from 'react-router-dom'
 
-const ActionButton = ({url, _id, username, slug}) => {
+const ActionButton = ({_id, username, slug}) => {
     const {deletePostt} = useContext(PostContext)
 
     const {state: {user }} = useContext(AuthContext)

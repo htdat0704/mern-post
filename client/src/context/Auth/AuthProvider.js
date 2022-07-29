@@ -3,7 +3,7 @@ import { setAuthFail, setAuthSuccess, setAuthDefult } from '../../reducers/AuthR
 import { useReducer,useEffect} from 'react'
 import { AuthContext } from './AuthContext';
 import axios from 'axios'
-import { LOCAL_STORAGE_TOKEN_NAME, apiUrl } from '../constant'
+import { LOCAL_STORAGE_TOKEN_NAME, apiUrl, apiUrlHeroku } from '../constant'
 import setAuthToken from '../../utils/setAuthToken'
 
 
@@ -23,9 +23,8 @@ const AuthContextProvider = ({children}) => {
         try{
             let response
             if(check){
-                response = await axios.get(`${apiUrl}/auth`)
+                response = await axios.get(`${apiUrlHeroku}/auth`)
             }
-            console.log(response.data.success)
             if(response.data.success){
                 dispatch(setAuthSuccess(response.data.user))
             }
@@ -36,13 +35,13 @@ const AuthContextProvider = ({children}) => {
        }
     }
 
-    useEffect(() => {
-        loadUser()
-    },[])
+    // useEffect(() => {
+    //     loadUser()
+    // },[])
 
     const loginUser = async userForm => {
         try{
-            const response =await axios.post(`${apiUrl}/auth/login`,userForm);
+            const response =await axios.post(`${apiUrlHeroku}/auth/login`,userForm);
             if(response.data.success)
             localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken)
             dispatch(setAuthSuccess(response.data.user))
@@ -56,7 +55,7 @@ const AuthContextProvider = ({children}) => {
 
     const registerUser = async userForm => {
         try{
-            const response =await axios.post(`${apiUrl}/auth/register`,userForm);
+            const response =await axios.post(`${apiUrlHeroku}/auth/register`,userForm);
             if(response.data.success)
             localStorage.setItem(LOCAL_STORAGE_TOKEN_NAME, response.data.accessToken)
             dispatch(setAuthSuccess(response.data.newUser))

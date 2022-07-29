@@ -58,10 +58,10 @@ const UpdateForm = ({post}) => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Update Description</Form.Label>
-                    <Form.Control type="text" 
-                                name='description'
-                                value={description}
-                                onChange={onChangeUpdated} />
+                    <Form.Control as='textarea' row={4}
+                                name='description' 
+                                onChange={onChangeUpdated} 
+                                value={description}/>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Update URL:</Form.Label>
@@ -73,9 +73,9 @@ const UpdateForm = ({post}) => {
                 <Form.Group>
                         <Form.Label>Status:</Form.Label>
                         <Form.Control as='select' value={status} name='status' onChange={onChangeUpdated}>
-                            <option value="TO LEARN">TO LEARN</option>
-                            <option value="LEARNING">LEARNING</option>
-                            <option value="LEARNED">LEARNED</option>
+                            <option value="TRAVEL">TRAVEL</option>
+                            <option value="FOOD AND DRINK">FOOD AND DRINK</option>
+                            <option value="CULTURE">CULTURE</option>
                         </Form.Control>
                 </Form.Group>
                 <br></br>
