@@ -1,7 +1,7 @@
 import {PostContext} from './PostContext';
 import { postReducer,postLoading } from '../../reducers/PostReducer/postReducer';
 import axios from 'axios';
-import {setPostSuccess, setPostFail,setAddPost, deletePost, updatePost, getPost, setDefault, getComment, addCommentSuccess, deleteComment} from '../../reducers/PostReducer/postActions'
+import {setPostSuccess, setPostFail,setAddPost, deletePost, updatePost, getPost, setDefault, getComment, updateComment, deleteComment} from '../../reducers/PostReducer/postActions'
 import {useReducer, useState} from 'react'
 import setAuthToken from '../../utils/setAuthToken';
 import { LOCAL_STORAGE_TOKEN_NAME, apiUrl, apiUrlHeroku } from '../constant';
@@ -127,12 +127,27 @@ function PostProvider({children}) {
         }
     }
 
+    const updateCommentId = async (text, commentId) => {
+        try{
+            
+            const updateCommentForm = {body: text}
+            const response = await axios.put(`${apiUrlHeroku}/post/updateComment/${commentId}`,updateCommentForm)
+            if(response.data.success){
+                if(response.data.comment){
+                    await dispatch(updateComment(response.data.comment))
+                }
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+
     const setStateDefault = () => {
         dispatch(setDefault())
     }
 
 
-    const postContext = {postState, getPosts, getPostOneUsers,showAddPost,setShowAddPost, addPost, deletePostt, getOnePost, updateOnePost, setStateDefault,addComment, deleteCommentId }
+    const postContext = {postState, getPosts, getPostOneUsers,showAddPost,setShowAddPost, addPost, deletePostt, getOnePost, updateOnePost, setStateDefault,addComment, deleteCommentId,updateCommentId }
 
     return (
         <PostContext.Provider value={postContext} >

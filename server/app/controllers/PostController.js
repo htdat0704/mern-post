@@ -80,44 +80,44 @@ class PostController {
     updatePost = async (req,res) =>{
         const { title, description, url, status } = req.body
 
-	// Simple validation
-	if (!title)
-		return res
-			.status(400)
-			.json({ success: false, message: 'Title is required' })
+	    // Simple validation
+        if (!title)
+            return res
+                .status(400)
+                .json({ success: false, message: 'Title is required' })
 
-	try {
-		let updatedPost = {
-			title,
-			description: description || '',
-			url: url || '',
-			status: status || 'TRAVEL'
-		}
+        try {
+            let updatedPost = {
+                title,
+                description: description || '',
+                url: url || '',
+                status: status || 'TRAVEL'
+            }
 
-		const postUpdateCondition = { _id: req.params.id, user: req.userId }
+            const postUpdateCondition = { _id: req.params.id, user: req.userId }
 
-		updatedPost = await Post.findOneAndUpdate(
-			postUpdateCondition,
-			updatedPost,
-			{ new: true }
-		)
+            updatedPost = await Post.findOneAndUpdate(
+                postUpdateCondition,
+                updatedPost,
+                { new: true }
+            )
 
-		// User not authorised to update post or post not found
-		if (!updatedPost)
-			return res.status(401).json({
-				success: false,
-				message: 'Post not found or user not authorised',
-			})
+            // User not authorised to update post or post not found
+            if (!updatedPost)
+                return res.status(401).json({
+                    success: false,
+                    message: 'Post not found or user not authorised',
+                })
 
-		res.json({
-			success: true,
-			message: 'Excellent progress!',
-			post: updatedPost
-		})
-	} catch (error) {
-		console.log(error)
-		res.status(500).json({ success: false, message: 'Internal server error' })
-	}
+            res.json({
+                success: true,
+                message: 'Excellent progress!',
+                post: updatedPost
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
+        }
     }
 
     deletePost = async (req,res) => {
@@ -189,6 +189,52 @@ class PostController {
             console.log(err)
             res.status(500).json({success: false, message:'Interal server error'})
         }
+    }
+
+    updateComment = async (req,res) => {
+    
+        const { body } = req.body
+        console.log(body)
+
+        if(!body){
+            console.log(body)
+            return res.status(401).json({
+                success: true,
+                message: 'No comment update',
+            })
+        }
+
+        try {
+            let updatedComment = {
+                body,
+            }
+            
+            const commentUpdateCondition = { _id: req.params.id }
+    
+            updatedComment = await Comment.findOneAndUpdate(
+                commentUpdateCondition,
+                updatedComment,
+                { new: true }
+            )
+
+            // User not authorised to update post or post not found
+            if (!updatedComment)
+                return res.status(401).json({
+                    success: false,
+                    message: 'Post not found or user not authorised',
+                })
+    
+            res.json({
+                success: true,
+                message: 'Excellent progress!',
+                comment: updatedComment
+            })
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: 'Internal server error' })
+        }
+            
+        
     }
 }
 

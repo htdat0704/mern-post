@@ -1,4 +1,4 @@
-import { SET_POST_SUCCESS, SET_POST_FAIL,ADD_POST, DELETE_POST,UPDATE_POST,GET_POST , SET_DEFAULT, GET_COMMENT, ADD_COMMENT, DELETE_COMMENT } from "./postActions";
+import { SET_POST_SUCCESS, SET_POST_FAIL,ADD_POST, DELETE_POST,UPDATE_POST,GET_POST , SET_DEFAULT, GET_COMMENT, ADD_COMMENT, DELETE_COMMENT, UPDATE_COMMENT } from "./postActions";
 
 export const postLoading = {
     post:null,
@@ -10,6 +10,19 @@ export const postLoading = {
 export const postReducer = (state,action) => {
     const{type,  payload} = action;
     switch(type){
+        case UPDATE_COMMENT:
+            const newComments = state.comments.map(comment =>
+				comment._id === payload._id ? (
+                    {
+                        ...comment,
+                        body: payload.body,
+                    }
+                ) : comment
+			)
+            return{
+                ...state,
+                comments: newComments
+            }
         case DELETE_COMMENT:
             return{
                 ...state,

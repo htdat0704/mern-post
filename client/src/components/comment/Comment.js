@@ -37,9 +37,9 @@ const Comment = ({comment, replies, deleteComment, parentId = null,activeComment
                     submitLabel="Update"
                     hasCancelButton
                     initialText={comment.body}
-                    handleSubmit={(text) => updateComment(text, comment.id)}
+                    handleSubmit={(text) => updateComment(text, comment._id)}
                     handleCancel={() => {
-                    setActiveComment(null);
+                        setActiveComment(null);
                     }}
                 />
                 )}

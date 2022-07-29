@@ -1,14 +1,33 @@
-import {useState,useContext} from 'react';
+import {useState,useContext, useEffect} from 'react';
 import { AuthContext } from '../../context/Auth/AuthContext';
 import Comment from './Comment'
 import CommentForm from './CommentForm'
 import { PostContext } from '../../context/Post/PostContext';
 import { Link } from 'react-router-dom';
+import LoadingModal from '../layout/LoadingModel';
 
 const Comments = () =>{
     const [activeComment, setActiveComment] = useState(null);
-    const { postState: {comments}, addComment, deleteCommentId} = useContext(PostContext);
+    const { postState: {comments}, addComment, deleteCommentId, updateCommentId} = useContext(PostContext);
     const {state: {isAuthenticated}} = useContext(AuthContext)
+    const [isShowLoading, setShowLoading] = useState({
+        type: '',
+        show: false,
+    });
+
+    const loadingShow = (type) => {
+        setShowLoading(prev => ({
+            ...prev,
+            type: type,
+            show: true,
+        }))
+        setTimeout(() => {
+            setShowLoading(prev => ({
+                ...prev,
+                show: false,
+            }))
+        },1500)
+    }   
 
 
     const rootCommentsNoParent = comments.filter (backend =>backend.parentId === null);
@@ -18,19 +37,22 @@ const Comments = () =>{
     
     const addCommentText = (text,parentId = null) => {
         addComment(text,parentId)
-       
+        loadingShow('ADD')
     }
 
     const deleteCommentText = (idComment) => {
         deleteCommentId(idComment)
+        loadingShow('DELETE')
     }
 
     const updateComment = (text, commentId) => {
-        console.log("update")
-      };
+        updateCommentId(text, commentId)
+        loadingShow('UPDATE')
+    };
 
 
     return <div className='comments'>
+        <LoadingModal show={isShowLoading.show} type={isShowLoading.type}></LoadingModal>
         <h3 className='comments-title'>Comments</h3>
         {isAuthenticated && <>
             <div className='comment-form-title'>Write Comment</div>
@@ -54,6 +76,7 @@ const Comments = () =>{
                 />
             ))}
         </div>
+        
     </div>
 }
 

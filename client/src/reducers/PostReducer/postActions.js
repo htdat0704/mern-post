@@ -9,7 +9,14 @@ export const SET_DEFAULT = 'set_default'
 export const GET_COMMENT = 'get_comment'
 export const ADD_COMMENT = 'add_comment'
 export const DELETE_COMMENT = 'delete_comment'
+export const UPDATE_COMMENT = 'update_comment'
 
+export const updateComment = payload => {
+    return{
+        type: UPDATE_COMMENT,
+        payload
+    }
+}
 export const deleteComment = commentID => {
     return{
         type: DELETE_COMMENT,
