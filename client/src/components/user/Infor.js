@@ -1,32 +1,32 @@
-import editIcon from '../../assets/edit.svg'
-import Button from 'react-bootstrap/Button'
-import { useNavigate } from 'react-router-dom'
+import editIcon from '../../assets/edit.svg';
+import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 const Infor = ({ user }) => {
-    let body
-    const navigate = useNavigate()
+  let body;
+  const navigate = useNavigate();
 
-    const handleClick = () => {
-        navigate(`/updateProfile`)
-    }
+  const handleClick = () => {
+    navigate(`/updateProfile`);
+  };
 
-    body = (
-        <div className="container">
-            <h1 style={{ textAlign: 'center' }}>
-                HELLO: {user.username} -<small> username </small>
-                <Button
-                    className="post-button"
-                    style={{ marginLeft: 'auto', marginRight: '30px' }}
-                    onClick={handleClick}
-                >
-                    <img src={editIcon} className="img-fluid" alt="edit" />
-                </Button>
-            </h1>
-            <ul></ul>
-        </div>
-    )
+  body = (
+    <div className="container">
+      <h1 style={{ textAlign: 'center' }}>
+        HELLO: {user.username} -<small> username </small>
+        <Button
+          className="post-button"
+          style={{ marginLeft: 'auto', marginRight: '30px' }}
+          onClick={handleClick}>
+          <img src={editIcon} className="img-fluid" alt="edit" />
+        </Button>
+      </h1>
+      <ul></ul>
+    </div>
+  );
 
-    return <> {body}</>
-}
+  return <> {body}</>;
+};
 
-export default Infor
+export default Infor;
